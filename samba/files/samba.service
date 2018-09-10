@@ -1,0 +1,18 @@
+[Unit]
+Description=Samba Container
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/container-samba
+PrivateNetwork=false
+PrivateTmp=true
+ProtectSystem=full
+KillSignal=SIGTERM
+SendSIGKILL=no
+Restart=on-abort
+RestartSec=5s
+ExecStartPre=-/usr/bin/podman stop $NAME
+ExecStartPre=-/usr/bin/podman rm $NAME
+ExecStart=/usr/bin/podman run --name $NAME --network host --rm -v $BIND -v $CONFIG $IMAGE
