@@ -1,0 +1,15 @@
+__TTY=""
+__CONTAINER=$(/usr/bin/buildah from --name $NAME $IMAGE)
+__CONFIG() {
+        /usr/bin/buildah config "$@" $__CONTAINER
+}
+__CLEAN() {
+        /usr/bin/find "$@" -type f -delete
+            /usr/bin/find "$@" -mindepth 1 -type d -delete
+}
+CONFIG=__CONFIG
+CLEAN=__CLEAN
+RUN="/usr/bin/buildah run $__TTY $__CONTAINER --"
+COPY="/usr/bin/buildah copy $__CONTAINER"
+MKDIR="$RUN /usr/bin/mkdir -p"
+CSH="$RUN sh -l -c"
