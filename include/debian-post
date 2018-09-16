@@ -1,0 +1,2 @@
+$RUN $APT_GET clean
+$RUN $APT_GET autoremove
