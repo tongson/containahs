@@ -1,0 +1,26 @@
+[Unit]
+Description=PostgreSQL Container
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/container-postgresql
+PrivateNetwork=false
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+NoNewPrivileges=true
+KillSignal=SIGINT
+KillMode=mixed
+Restart=on-failure
+RestartSec=5s
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStartPre=-/usr/bin/podman stop ${NAME}
+ExecStartPre=-/usr/bin/podman rm ${NAME}
+ExecStart=/usr/bin/podman run --name ${NAME} --network host --rm --ulimit nofile=4192:16384 -v ${BIND} ${IMAGE}
+OOMScoreAdjust=-200
+BlockIOWeight=1000
+LimitNOFILE=16384
+Nice=-5
