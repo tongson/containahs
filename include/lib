@@ -1,22 +1,28 @@
 __TTY=""
 __CONTAINER=$(/usr/bin/buildah from --name $NAME $FROM)
-CFG() {
+CFG()
+{
     /usr/bin/buildah config "$@" $__CONTAINER
 }
-CLR() {
+CLR()
+{
     test -d "$@" && /usr/bin/find "$@" -type f -delete
     test -d "$@" && /usr/bin/find "$@" -mindepth 1 -type d -delete
     return 0
 }
-RUN() {
+RUN()
+{
     /usr/bin/buildah run $__TTY $__CONTAINER -- "$@"
 }
-CP(){
+CP()
+{
     /usr/bin/buildah copy $__CONTAINER "$@"
 }
-DIR(){
+DIR()
+{
     /usr/bin/buildah run $__CONTAINER -- /usr/bin/mkdir -p "$@"
 }
-SH(){
+SH()
+{
     /usr/bin/buildah run $__CONTAINER -- sh -l -c "$@"
 }
