@@ -2,10 +2,10 @@
 set -efu
 NAME="postgresql-build"
 FROM="debian:testing-slim"
-. ../include/lib
-. ../include/debian-pre
 POSTGRESQL_DATA="/srv/postgresql/data"
 OPTS="-v $POSTGRESQL_DATA:/data"
+. ../include/lib
+. ../include/debian-pre
 /usr/bin/rm -rf $POSTGRESQL_DATA
 /usr/bin/mkdir -p $POSTGRESQL_DATA
 RUN $APT_GET --no-install-recommends install postgresql locales
