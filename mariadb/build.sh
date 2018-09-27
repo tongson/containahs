@@ -1,7 +1,7 @@
 #!/bin/sh
 set -efu
 NAME="mariadb-build"
-IMAGE="debian:testing-slim"
+FROM="debian:testing-slim"
 . ../include/lib
 . ../include/debian-pre
 MARIADB_DATA="/srv/mariadb/data"

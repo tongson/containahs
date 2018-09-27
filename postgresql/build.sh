@@ -1,7 +1,7 @@
 #!/bin/sh
 set -efu
 NAME="postgresql-build"
-IMAGE="debian:testing-slim"
+FROM="debian:testing-slim"
 . ../include/lib
 . ../include/debian-pre
 POSTGRESQL_DATA="/srv/postgresql/data"

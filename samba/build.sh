@@ -1,7 +1,7 @@
 #!/bin/sh
 set -efu
 NAME="samba-build"
-IMAGE="alpine:edge"
+FROM="alpine:edge"
 . ../include/lib
 RUN /sbin/apk upgrade --no-cache --available --no-progress
 RUN /sbin/apk add --no-cache --no-progress samba

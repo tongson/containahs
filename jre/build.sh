@@ -1,7 +1,7 @@
 #!/bin/sh
 set -efu
 NAME="jre-build"
-IMAGE="debian:testing-slim"
+FROM="debian:testing-slim"
 . ../include/lib
 . ../include/debian-pre
 RUN $APT_GET --no-install-recommends install openjdk-8-jre openjdk-8-jre-headless locales

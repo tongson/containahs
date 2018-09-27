@@ -1,5 +1,5 @@
 __TTY=""
-__CONTAINER=$(/usr/bin/buildah from --name $NAME $IMAGE)
+__CONTAINER=$(/usr/bin/buildah from --name $NAME $FROM)
 CFG() {
     /usr/bin/buildah config "$@" $__CONTAINER
 }
