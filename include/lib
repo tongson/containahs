@@ -19,9 +19,9 @@ CP()
 }
 DIR()
 {
-    /usr/bin/buildah run $__CONTAINER -- /usr/bin/mkdir -p "$@"
+    /usr/bin/buildah run ${OPTS} $__CONTAINER -- /usr/bin/mkdir -p "$@"
 }
 SH()
 {
-    /usr/bin/buildah run $__CONTAINER -- sh -l -c "$@"
+    /usr/bin/buildah run ${OPTS} $__CONTAINER -- sh -l -c "$@"
 }
