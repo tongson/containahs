@@ -1,4 +1,3 @@
-__TTY=""
 __CONTAINER=$(/usr/bin/buildah from --name $NAME $FROM)
 CFG()
 {
@@ -12,7 +11,7 @@ CLR()
 }
 RUN()
 {
-    /usr/bin/buildah run $__TTY $__CONTAINER -- "$@"
+    /usr/bin/buildah run ${OPTS} $__CONTAINER -- "$@"
 }
 CP()
 {

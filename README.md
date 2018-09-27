@@ -16,3 +16,8 @@ Verbs:
 
 `SH`: Run a command line within a shell
 
+
+
+Variables:
+
+`OPTS`: Options passed to `buildah run (RUN)`
