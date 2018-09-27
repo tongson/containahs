@@ -1,0 +1,3 @@
+YUM="/usr/bin/yum -y -q -e 0"
+RUN $YUM install --setopt=tsflags=nodocs deltarpm
+RUN $YUM update
