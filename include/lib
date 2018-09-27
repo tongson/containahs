@@ -4,8 +4,9 @@ __CONFIG() {
         /usr/bin/buildah config "$@" $__CONTAINER
 }
 __CLEAN() {
-        /usr/bin/find "$@" -type f -delete
-            /usr/bin/find "$@" -mindepth 1 -type d -delete
+    test -d "$@" && /usr/bin/find "$@" -type f -delete
+    test -d "$@" && /usr/bin/find "$@" -mindepth 1 -type d -delete
+    return 0
 }
 CONFIG=__CONFIG
 CLEAN=__CLEAN
