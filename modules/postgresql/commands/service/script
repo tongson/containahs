@@ -26,7 +26,7 @@ function cleanup() {
 }
 trap cleanup ERR
 PRINT "+" "Getting image ID of PostgreSQL ${POSTGRESQL} container..."
-IMAGE=podman images | grep -F "postgresql-${POSTGRESQL}" | awk '{print $3}'
+IMAGE=$(podman images | grep -F "postgresql-${POSTGRESQL}" | awk '{print $3}')
 SERVICE="/etc/systemd/system/container-postgresql.service"
 PRINT "+" "Generating systemd unit..."
 cp "$RERUN_MODULE_DIR/postgresql/commands/service/container-postgresql.service" $SERVICE
