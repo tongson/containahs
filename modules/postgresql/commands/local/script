@@ -53,6 +53,7 @@ CLEAR /var/tmp
 CLEAR /var/lib/apt/lists
 RUN chown postgres:postgres /data
 RUN runuser postgres -c "/usr/lib/postgresql/${POSTGRESQL}/bin/initdb --locale en_US.UTF-8 -E UTF8 -D '/data'"
+SH "echo \"listen_addresses = '*'\" >> /data/postgresql.conf"
 COPY "$RERUN_MODULE_DIR/commands/local/entrypoint.sh" /entrypoint.sh
 COPY "$RERUN_MODULE_DIR/commands/local/shutdown.sh" /shutdown.sh
 COPY "$RERUN_MODULE_DIR/commands/local/reload.sh" /reload.sh
