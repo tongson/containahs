@@ -17,8 +17,8 @@ RestartSec=5s
 ExecStartPre=-/usr/bin/podman stop postgresql-__POSTGRESQL__
 ExecStartPre=-/usr/bin/podman rm postgresql-__POSTGRESQL__
 ExecStart=/usr/bin/podman run --name postgresql-__POSTGRESQL__ --network host --rm --ulimit nofile=4192:16384 -v /srv/postgresql/data:/data __IMAGE__
-ExecStop=/usr/bin/podman exec postgresql-__POSTGRESQL__ kill -SIGINT $(head -1 /var/run/postgresql/__POSTGRESQL__-main.pid)
-ExecReload=/usr/bin/podman exec postgresql-__POSTGRESQL__ kill -SIGHUP $(head -1 /var/run/postgresql/__POSTGRESQL__-main.pid)
+ExecStop=/usr/bin/podman exec postgresql-__POSTGRESQL__ kill -INT $(head -1 /var/run/postgresql/__POSTGRESQL__-main.pid)
+ExecReload=/usr/bin/podman exec postgresql-__POSTGRESQL__ kill -HUP $(head -1 /var/run/postgresql/__POSTGRESQL__-main.pid)
 OOMScoreAdjust=-200
 BlockIOWeight=1000
 LimitNOFILE=16384
