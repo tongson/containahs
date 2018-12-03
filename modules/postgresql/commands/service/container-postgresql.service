@@ -5,14 +5,12 @@ Description=PostgreSQL Container
 WantedBy=multi-user.target
 
 [Service]
-Type=notify
 PrivateNetwork=false
 PrivateTmp=true
 ProtectSystem=full
 ProtectHome=true
 NoNewPrivileges=true
 KillSignal=SIGINT
-KillMode=mixed
 Restart=on-failure
 RestartSec=5s
 ExecReload=/bin/kill -HUP $MAINPID
