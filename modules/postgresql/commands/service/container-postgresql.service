@@ -16,9 +16,9 @@ KillMode=mixed
 Restart=on-failure
 RestartSec=5s
 ExecReload=/bin/kill -HUP $MAINPID
-ExecStartPre=-/usr/bin/podman stop container-postgresql-__POSTGRESQL__
-ExecStartPre=-/usr/bin/podman rm container-postresql-__POSTGRESQL__
-ExecStart=/usr/bin/podman run --name container-postgresql-__POSTGRESQL__ --network host --rm --ulimit nofile=4192:16384 -v /srv/postgresql/data:/data __IMAGE__
+ExecStartPre=-/usr/bin/podman stop postgresql-__POSTGRESQL__
+ExecStartPre=-/usr/bin/podman rm postgresql-__POSTGRESQL__
+ExecStart=/usr/bin/podman run --name postgresql-__POSTGRESQL__ --network host --rm --ulimit nofile=4192:16384 -v /srv/postgresql/data:/data __IMAGE__
 OOMScoreAdjust=-200
 BlockIOWeight=1000
 LimitNOFILE=16384
