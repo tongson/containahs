@@ -29,7 +29,7 @@ PRINT "+" "Getting image ID of PostgreSQL ${POSTGRESQL} container..."
 IMAGE=$(podman images | grep -F "postgresql-${POSTGRESQL}" | awk '{print $3}')
 SERVICE="/etc/systemd/system/container-postgresql.service"
 PRINT "+" "Generating systemd unit..."
-cp "$RERUN_MODULE_DIR/postgresql/commands/service/container-postgresql.service" $SERVICE
+cp "$RERUN_MODULE_DIR/commands/service/container-postgresql.service" $SERVICE
 sed -i "s:__IMAGE__:$IMAGE:g" $SERVICE
 sed -i "s:__POSTGRESQL__:$POSTGRESQL:g" $SERVICE
 PRINT "+" "Enabling and starting PostgreSQL container service..."
