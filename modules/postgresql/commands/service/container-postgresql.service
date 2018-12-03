@@ -16,7 +16,7 @@ Restart=on-failure
 RestartSec=5s
 ExecStartPre=-/usr/bin/podman stop postgresql-__POSTGRESQL__
 ExecStartPre=-/usr/bin/podman rm postgresql-__POSTGRESQL__
-ExecStart=/usr/bin/podman run --name postgresql-__POSTGRESQL__ --network host --rm --ulimit nofile=4192:16384 -v /srv/postgresql/data:/data __IMAGE__
+ExecStart=/usr/bin/podman run --name postgresql-__POSTGRESQL__ -p 5432:5432 --rm --ulimit nofile=4192:16384 -v /srv/postgresql/data:/data __IMAGE__
 ExecStop=/usr/bin/podman exec postgresql-__POSTGRESQL__ /shutdown.sh
 ExecReload=/usr/bin/podman exec postgresql-__POSTGRESQL__ /reload.sh
 OOMScoreAdjust=-200
