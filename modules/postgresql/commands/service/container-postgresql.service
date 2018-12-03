@@ -11,6 +11,7 @@ ProtectSystem=full
 ProtectHome=true
 NoNewPrivileges=true
 KillSignal=SIGINT
+SendSIGKILL=false
 Restart=on-failure
 RestartSec=5s
 ExecReload=/bin/kill -HUP $MAINPID
