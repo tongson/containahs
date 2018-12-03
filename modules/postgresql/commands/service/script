@@ -37,7 +37,7 @@ systemctl daemon-reload
 systemctl enable container-postgresql
 systemctl start container-postgresql
 
-PRINT "DONE."
+PRINT "!" "DONE."
 
 # Done. Exit with last command exit status.
 exit $?
