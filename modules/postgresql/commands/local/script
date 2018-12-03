@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #/ command: postgresql:local: "Create local PostgreSQL container"
-#/ usage: rerun postgresql:local [ --postgresql <"9.6">] [ --debian <"stable">] 
+#/ usage: rerun postgresql:local [ --postgresql <"9.6">] [ --debian <"stable">]
 #/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
 #/ option-variables: POSTGRESQL DEBIAN
 
@@ -53,7 +53,8 @@ CLEAR /var/tmp
 CLEAR /var/lib/apt/lists
 RUN chown postgres:postgres /data
 RUN runuser postgres -c "/usr/lib/postgresql/${POSTGRESQL}/bin/initdb --locale en_US.UTF-8 -E UTF8 -D '/data'"
-CONFIG --entrypoint '["/usr/lib/postgresql/${POSTGRESQL}/bin/postgres", "-c", "data_directory=/data", "-D", "/etc/postgresql/${POSTGRESQL}/main", "-d", "5"]'
+ENTRYPOINT="[\"/usr/lib/postgresql/${POSTGRESQL}/bin/postgres\", \"-c\", "data_directory=/data\", \"-D\", \"/etc/postgresql/${POSTGRESQL}/main\", \"-d\", \"5\"]"
+CONFIG --entrypoint $ENTRYPOINT
 CONFIG --cmd ''
 CONFIG --stop-signal TERM
 PRINT "+H" "Committing to containers-storage..."
