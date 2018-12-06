@@ -4,7 +4,7 @@
 #/ usage: rerun postgresql:service [ --postgresql <"9.6">]
 #/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
 #/ option-variables:
-# shellcheck source=modules/lib/functions.sh
+# shellcheck source=modules/postgresql/lib/functions.sh
 . "$RERUN_MODULE_DIR/lib/functions.sh" "service" || {
   echo >&2 "Failed loading function library." ; exit 1 ;
 }
