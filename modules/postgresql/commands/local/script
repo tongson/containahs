@@ -30,7 +30,7 @@ trap cleanup ERR
 NAME="postgresql-build"
 FROM="debian:${DEBIAN}-slim"
 PRINT "+H" "Pulling source image ($FROM)..."
-POSTGRESQL_DATA="/srv/postgresql/data"
+POSTGRESQL_DATA="/srv/postgresql-${POSTGRESQL}/data"
 PRINT "+H" "Recreating $POSTGRESQL_DATA..."
 /usr/bin/rm -rf $POSTGRESQL_DATA
 /usr/bin/mkdir -p $POSTGRESQL_DATA
