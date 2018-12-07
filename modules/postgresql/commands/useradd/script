@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+#/ command: postgresql:useradd: "Add user in the format to the local PostgreSQL installation"
+#/ usage: rerun postgresql:useradd  --user <"">  --address <""> [ --postgresql <"9.6">]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: USER ADDRESS POSTGRESQL
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "useradd" || {
+  echo >&2 "Failed loading function library." ; exit 1 ;
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+PRINT "+C" "Creating PostgreSQL user $USER. Enter new password..."
+podman exec -it "postgresql-$POSTGRESQL" runuser postgres -c "createuser -d -E -P -S $USER"
+PRINT "+H" "Adding pg_hba.conf entry for $USER..."
+echo "host all $USER $ADDRESS md5" >> "/srv/postgresql-$POSTGRESQL/conf/pg_hba.conf"
+PRINT "!" "Done."
+# Done. Exit with last command exit status.
+exit $?
+
