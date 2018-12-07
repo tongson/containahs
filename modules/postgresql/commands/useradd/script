@@ -19,6 +19,8 @@ rerun_options_parse "$@"
 # - - -
 # Put the command implementation here.
 # - - -
+PRINT "+H" "Checking if PostgreSQL container service is active..."
+systemctl is-active container-postgresql
 PRINT "+C" "Creating PostgreSQL user $USER. Enter new password..."
 podman exec -it "postgresql-$POSTGRESQL" runuser postgres -c "createuser -d -E -P -S $USER"
 PRINT "+H" "Adding pg_hba.conf entry for $USER..."
