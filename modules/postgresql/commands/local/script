@@ -31,10 +31,14 @@ NAME="postgresql-build"
 FROM="debian:${DEBIAN}-slim"
 PRINT "+H" "Pulling source image ($FROM)..."
 POSTGRESQL_DATA="/srv/postgresql-${POSTGRESQL}/data"
+POSTGRESQL_CONF="/srv/postgresql-${POSTGRESQL}/conf"
 PRINT "+H" "Recreating $POSTGRESQL_DATA..."
 /usr/bin/rm -rf $POSTGRESQL_DATA
 /usr/bin/mkdir -p $POSTGRESQL_DATA
-OPTS="-v ${POSTGRESQL_DATA}:/data"
+PRINT "+H" "Recreating $POSTGRESQL_CONF..."
+/usr/bin/rm -rf $POSTGRESQL_CONF
+/usr/bin/mkdir -p $POSTGRESQL_CONF
+OPTS="-v ${POSTGRESQL_DATA}:/data -v ${POSTGRESQL_CONF}:/etc/postgresql/${POSTGRESQL}/main"
 . "$RERUN_MODULE_DIR/lib/buildah.sh"
 
 APT_GET="/usr/bin/env DEBIAN_FRONTEND=noninteractive apt-get -qq"
@@ -53,7 +57,7 @@ CLEAR /var/tmp
 CLEAR /var/lib/apt/lists
 RUN chown postgres:postgres /data
 RUN runuser postgres -c "/usr/lib/postgresql/${POSTGRESQL}/bin/initdb --locale en_US.UTF-8 -E UTF8 -D '/data'"
-SH "echo \"listen_addresses = '*'\" >> /etc/postgresql/${POSTGRESQL}/main/postgresql.conf"
+echo \"listen_addresses = '*'\" >> "${POSTGRESQL_CONF}/postgresql.conf"
 COPY "$RERUN_MODULE_DIR/commands/local/entrypoint.sh" /entrypoint.sh
 COPY "$RERUN_MODULE_DIR/commands/local/shutdown.sh" /shutdown.sh
 COPY "$RERUN_MODULE_DIR/commands/local/reload.sh" /reload.sh
