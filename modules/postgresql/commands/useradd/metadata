@@ -3,5 +3,5 @@
 # Fri Dec  7 15:08:37 HKT 2018
 NAME=useradd
 DESCRIPTION="Add user in the format  to the local PostgreSQL installation"
-OPTIONS="user address postgresql"
+OPTIONS="user address postgresql database"
 GENERATE_HELP="true"
