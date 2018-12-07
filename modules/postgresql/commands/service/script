@@ -36,7 +36,7 @@ PRINT "+" "Enabling and starting PostgreSQL container service..."
 systemctl daemon-reload
 systemctl enable container-postgresql
 systemctl start container-postgresql
-
+systemctl is-active container-postgresql
 PRINT "!" "DONE."
 
 # Done. Exit with last command exit status.
