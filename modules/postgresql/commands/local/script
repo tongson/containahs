@@ -64,10 +64,6 @@ COPY "$RERUN_MODULE_DIR/commands/local/reload.sh" /reload.sh
 RUN sed -i "s:__POSTGRESQL__:${POSTGRESQL}:g" /entrypoint.sh
 RUN sed -i "s:__POSTGRESQL__:${POSTGRESQL}:g" /shutdown.sh
 RUN sed -i "s:__POSTGRESQL__:${POSTGRESQL}:g" /reload.sh
-PRINT "?C" "Create a new PostgreSQL user..."
-read USER
-PRINT "?C" "Enter password for this user..."
-RUN runuser postgres -c "createuser -d -E -P -S $USER"
 CONFIG --entrypoint '["/entrypoint.sh"]'
 CONFIG --cmd ''
 CONFIG --stop-signal TERM
