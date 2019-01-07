@@ -40,8 +40,8 @@ RUN rm -f /jdajava.tar.gz
 PRINT "?C" "Enter SecureLink registration code:"
 read code
 SH "echo autoRegCode=$code > /home/rss/slink/bin/auto_install.properties"
-RUN chown -R rss:rss /home/rss
 RUN /home/rss/slink/java/bin/java -jar /home/rss/slink/bin/components/upgrade.jar -b /home/rss/slink/bin /home/rss/slink/bin/components/securelink.war
+RUN chown -R rss:rss /home/rss
 CONFIG --entrypoint '["runuser", "-u", "rss", "--", "/home/rss/slink/java/bin/java", "-Djava.class.path=/home/rss/slink/lib/jettyslink.jar:/home/rss/slink/lib/jetty.jar:/home/rss/slink/lib/jetty-util.jar:/home/rss/slink/lib/servlet.jar", "-Djetty.home=/home/rss/slink", "-Dfile.encoding=UTF-8", "-Djava.security.egd=file:/dev/urandom", "rss.jettyslink.JettySLink", "/home/rss/slink/conf/jetty.xml"]'
 CONFIG --cmd ''
 CONFIG --stop-signal TERM
