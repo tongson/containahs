@@ -31,16 +31,21 @@ PRINT "+C" "Adding rss user..."
 RUN useradd -m -U -d /home/rss rss
 RUN $YUM install glibc.i686
 PRINT "+C" "Installing SecureLink..."
-COPY {jdaclient,jdajava}.tar.gz /
-RUN tar -C /home/rss -xf /{jdaclient,jdajava}.tar.gz
-RUN rm -f /{jdaclient,jdajava}.tar.gz
+COPY jdaclient.tar.gz /
+COPY jdajava.tar.gz /
+RUN tar -C /home/rss -xf /jdaclient.tar.gz
+RUN tar -C /home/rss -xf /jdajava.tar.gz
+RUN rm -f /jdaclient.tar.gz
+RUN rm -f /jdajava.tar.gz
 PRINT "?C" "Enter SecureLink registration code:"
 read code
 SH "echo autoRegCode=$code > /home/rss/slink/bin/auto_install.properties"
 RUN chown rss:rss /home/rss/slink/bin/auto_install.properties
-CONFIG --entrypoint '["/home/rss/slink/java/bin/java", "-Djava.class.path=/home/rss/slink/lib/jettyslink.jar:/home/rss/slink/lib/jetty.jar:/home/rss/slink/lib/jetty-util.jar:/home/rss/slink/lib/servlet.jar", "-Djetty.home=/home/rss/slink -Dfile.encoding=UTF-8", "-Djava.security.egd=file:/dev/urandom", rss.jettyslink.JettySLink", "/home/rss/slink/conf/jetty.xml"]'
+CONFIG --entrypoint '["/home/rss/slink/java/bin/java", "-Djava.class.path=/home/rss/slink/lib/jettyslink.jar:/home/rss/slink/lib/jetty.jar:/home/rss/slink/lib/jetty-util.jar:/home/rss/slink/lib/servlet.jar", "-Djetty.home=/home/rss/slink", "-Dfile.encoding=UTF-8", "-Djava.security.egd=file:/dev/urandom", "rss.jettyslink.JettySLink", "/home/rss/slink/conf/jetty.xml"]'
 CONFIG --cmd ''
 CONFIG --stop-signal TERM
+PRINT "+H" "Committing to containers-storage..."
+buildah commit ${NAME} containers-storage:securelink
 # Done. Exit with last command exit status.
 exit $?
 
