@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+#/ command: securelink:reset: "Delete buildah container and podman image. Stop podman service."
+#/ usage: rerun securelink:reset [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables:
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "reset" || {
+  echo >&2 "Failed loading function library." ; exit 1 ;
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+PRINT "+" "Getting image ID of SecureLink container..."
+IMAGE=$(podman images | grep -F "securelink" | awk '{print $3}')
+PRINT "+" "Stopping podman-securelink service..."
+systemctl stop podman-securelink
+PRINT "+" "Deleting buildah container..."
+buildah rm securelink-build
+PRINT "+" "Deleting SecureLink image..."
+podman rmi -f "$IMAGE"
+# Done. Exit with last command exit status.
+exit $?
+
