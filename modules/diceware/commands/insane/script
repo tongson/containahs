@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+#/ command: diceware:insane: "Generate passphrase from Debian's wamerican-insane package wordlist."
+#/ usage: rerun diceware:insane [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables:
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "insane" || {
+  echo >&2 "Failed loading function library." ; exit 1 ;
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+podman run --rm --net host --security-opt apparmor=unconfined diceware -w en_insane
+# Done. Exit with last command exit status.
+exit $?
+
