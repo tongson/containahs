@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #/ command: tumbleweed:tarball: "Generate tarball from container image"
-#/ usage: rerun tumbleweed:tarball [options]
+#/ usage: rerun tumbleweed:tarball [ --compress <false>]
 #/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
 #/ option-variables:
 
@@ -35,8 +35,11 @@ mkdir "$TMPDIR/extracted"
 tar -C "$TMPDIR/extracted" -xf  "$TMPDIR/tumbleweed-rootfs.tar"
 find "$TMPDIR/extracted" -maxdepth 1 -name "*.tar" -exec mv {} "$TARGET" \;
 rm -rf "$TMPDIR"
+if [ "$COMPRESS" -eq "true" ]
+then
 PRINT "+" "Compressing tarball..."
 xz "$TARGET"
+fi
 PRINT "!" "Wrote to $TARGET"
 # Done. Exit with last command exit status.
 exit $?
