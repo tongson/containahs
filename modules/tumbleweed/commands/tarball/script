@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+#/ command: tumbleweed:tarball: "Generate tarball from container image"
+#/ usage: rerun tumbleweed:tarball [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables:
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "tarball" || {
+  echo >&2 "Failed loading function library." ; exit 1 ;
+}
+
+set -o errexit -o nounset -o pipefail -o errtrace
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+function cleanup {
+    PRINT "!" "Error Encountered."
+    PRINT "!" "Cleaning up..."
+    rm -rf "$TMPDIR"
+}
+trap cleanup ERR
+TARGET="./tumbleweed.tar"
+. "$RERUN_MODULES/lib/print.sh"
+IMAGE=$(podman images | grep -F -- 'tumbleweed-rootfs' | awk '{print $3}')
+TMPDIR=$(mktemp -d -p .)
+PRINT "+" "Extracting tarball from image..."
+podman save "$IMAGE" > "$TMPDIR/tumbleweed-rootfs.tar"
+mkdir "$TMPDIR/extracted"
+tar -C "$TMPDIR/extracted" -xf  "$TMPDIR/tumbleweed-rootfs.tar"
+find "$TMPDIR/extracted" -maxdepth 1 -name "*.tar" -exec mv {} "$TARGET" \;
+rm -rf "$TMPDIR"
+touch "$TARGET"
+PRINT "!" "Wrote to $TARGET"
+# Done. Exit with last command exit status.
+exit $?
+
