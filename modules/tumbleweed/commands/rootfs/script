@@ -38,14 +38,13 @@ OPTS=""
 PRINT "+H" "Removing old image..."
 remove_image
 . "$RERUN_MODULES/lib/buildah.sh"
-zypper dup
-zypper install --no-recommends -y kernel-default
-zypper install --no-recommends -y grub2 which e2fsprogs xfsprogs iproute2 openssh tmux git vim podman buildah btrfsprogs apparmor-parser apparmor-profiles strace curl mtr
-zypper clean --all
+RUN zypper dup
+RUN zypper install --no-recommends -y systemd grub2 kernel-default install-initrd-openSUSE
+RUN zypper install --no-recommends -y e2fsprogs xfsprogs iproute2 openssh tmux git vim podman buildah btrfsprogs apparmor-parser apparmor-profiles strace curl mtr
+RUN zypper clean --all
 CLEAR /tmp
 CLEAR /var/tmp
 PRINT "+H" "Committing to containers-storage..."
 buildah commit --rm --squash "${NAME}" "containers-storage:tumbleweed-rootfs"
 # Done. Exit with last command exit status.
 exit $?
-
