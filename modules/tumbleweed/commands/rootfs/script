@@ -19,6 +19,12 @@ rerun_options_parse "$@"
 # - - -
 # Put the command implementation here.
 # - - -
+function remove_image {
+    if [ $(podman images | grep -F -- 'tumbleweed-rootfs') ]
+    then
+        podman rmi -f $(podman images | grep -F -- 'tumbleweed-rootfs' | awk '{print $3}')
+    fi
+}
 function cleanup {
     PRINT "+H" "Cleaning up..."
     buildah rm "$NAME" 2>/dev/null 1>/dev/null
@@ -29,6 +35,8 @@ trap cleanup ERR
 NAME="tumbleweed-build"
 FROM="docker.io/opensuse/tumbleweed"
 OPTS=""
+PRINT "+H" "Removing old image..."
+remove_image
 . "$RERUN_MODULES/lib/buildah.sh"
 zypper dup
 zypper install --no-recommends -y kernel-default
