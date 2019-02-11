@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+#/ command: tumbleweed:rootfs: "Create container image for custom openSUSE Tumbleweed rootfs"
+#/ usage: rerun tumbleweed:rootfs [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables:
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "rootfs" || {
+  echo >&2 "Failed loading function library." ; exit 1 ;
+}
+
+set -o errexit -o nounset -o pipefail -o errtrace
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+function cleanup {
+    PRINT "+H" "Cleaning up..."
+    buildah rm "$NAME" 2>/dev/null 1>/dev/null
+    PRINT "+X" "Done!"
+}
+trap cleanup ERR
+. "$RERUN_MODULES/lib/print.sh"
+NAME="tumbleweed-build"
+FROM="docker.io/opensuse/tumbleweed"
+OPTS=""
+. "$RERUN_MODULES/lib/buildah.sh"
+zypper dup
+zypper install --no-recommends -y kernel-default
+zypper install --no-recommends -y grub2 which e2fsprogs xfsprogs iproute2 openssh tmux git vim podman buildah btrfsprogs apparmor-parser apparmor-profiles strace curl mtr
+zypper clean --all
+CLEAR /tmp
+CLEAR /var/tmp
+PRINT "+H" "Committing to containers-storage..."
+buildah commit --rm --squash "${NAME}" "containers-storage:tumbleweed-rootfs"
+# Done. Exit with last command exit status.
+exit $?
+
