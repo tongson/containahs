@@ -38,7 +38,7 @@ OPTS=""
 PRINT "+H" "Removing old image..."
 remove_image
 . "$RERUN_MODULES/lib/buildah.sh"
-RUN zypper dup
+RUN zypper dup -y
 RUN zypper install --no-recommends -y systemd grub2 kernel-default kernel-firmware install-initrd-openSUSE
 RUN zypper install --no-recommends -y e2fsprogs xfsprogs iproute2 openssh tmux git vim podman buildah apparmor-parser apparmor-profiles curl
 RUN zypper clean --all
