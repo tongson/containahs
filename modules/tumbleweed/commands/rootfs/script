@@ -20,7 +20,7 @@ rerun_options_parse "$@"
 # Put the command implementation here.
 # - - -
 function remove_image {
-    if [ $(podman images | grep -F -- 'tumbleweed-rootfs') ]
+    if podman inspect "tumbleweed-rootfs" 2>/dev/null 1>/dev/null
     then
         podman rmi -f $(podman images | grep -F -- 'tumbleweed-rootfs' | awk '{print $3}')
     fi
