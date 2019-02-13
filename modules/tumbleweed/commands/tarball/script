@@ -35,7 +35,7 @@ mkdir "$TMPDIR/extracted"
 tar -C "$TMPDIR/extracted" -xf  "$TMPDIR/tumbleweed-rootfs.tar"
 find "$TMPDIR/extracted" -maxdepth 1 -name "*.tar" -exec mv {} "$TARGET" \;
 rm -rf "$TMPDIR"
-if [ "$COMPRESS" -eq "true" ]
+if [ "$COMPRESS" = "true" ]
 then
 PRINT "+" "Compressing tarball..."
 xz "$TARGET"
