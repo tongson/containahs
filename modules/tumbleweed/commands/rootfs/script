@@ -25,19 +25,13 @@ function remove_image {
         podman rmi -f $(podman images | grep -F -- 'tumbleweed-rootfs' | awk '{print $3}')
     fi
 }
-function cleanup {
-    PRINT "+H" "Cleaning up..."
-    buildah rm "$NAME" 2>/dev/null 1>/dev/null
-    PRINT "+X" "Done!"
-}
-trap cleanup ERR
+export NAME="tumbleweed-build"
+export FROM="docker.io/opensuse/tumbleweed"
+export OPTS=""
 . "$RERUN_MODULES/lib/print.sh"
-NAME="tumbleweed-build"
-FROM="docker.io/opensuse/tumbleweed"
-OPTS=""
+. "$RERUN_MODULES/lib/buildah.sh"
 PRINT "+H" "Removing old image..."
 remove_image
-. "$RERUN_MODULES/lib/buildah.sh"
 RUN zypper dup -y
 RUN zypper install --no-recommends -y systemd grub2 kernel-default kernel-firmware install-initrd-openSUSE glibc-locale grub2-x86_64-efi
 RUN zypper install --no-recommends -y e2fsprogs xfsprogs iproute2 openssh tmux git vim podman buildah chrony apparmor-parser apparmor-profiles curl golang-github-prometheus-node_exporter tar which wget tcpdump strace
