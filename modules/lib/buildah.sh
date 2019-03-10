@@ -13,6 +13,21 @@ CONFIG()
     printf '[\e[1;33m%s\e[m] \e[1;35m%s\e[m\n' "+H" "Applying buildah configuration..."
     /usr/bin/buildah config "$@" "${__CONTAINER}"
 }
+
+ENTRYPOINT()
+{
+    printf '[\e[1;33m%s\e[m] \e[1;35m%s\e[m\n' "+H" "Applying entrypoint configuration..."
+    /usr/bin/buildah config --entrypoint "$@" "${__CONTAINER}"
+    /usr/bin/buildah config --cmd '' "${__CONTAINER}"
+    /usr/bin/buildah config --stop-signal TERM "${__CONTAINER}"
+}
+
+COMMIT()
+{
+    printf '[\e[1;33m%s\e[m] \e[1;35m%s\e[m\n' "+H" "Committing container..."
+    /usr/bin/buildah commit --rm --squash "${NAME}" "containers-storage:${1}"
+}
+
 CLEAR()
 {
     printf '[\e[1;33m%s\e[m] \e[1;35m%s\e[m\n' "+C" "Clearing directories..."
