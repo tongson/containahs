@@ -19,14 +19,9 @@ rerun_options_parse "$@"
 # - - -
 # Put the command implementation here.
 # - - -
-function cleanup {
-    PRINT "!" "Error Encountered."
-    PRINT "!" "Cleaning up..."
-    rm -rf "$TMPDIR"
-}
-trap cleanup ERR
 TARGET="./tumbleweed.tar"
 . "$RERUN_MODULES/lib/print.sh"
+. "$RERUN_MODULES/lib/functions.sh"
 IMAGE=$(podman images | grep -F -- 'tumbleweed-rootfs' | awk '{print $3}')
 TMPDIR=$(mktemp -d -p .)
 PRINT "+" "Extracting tarball from image..."
