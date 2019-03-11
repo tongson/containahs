@@ -22,7 +22,7 @@ rerun_options_parse "$@"
 TARGET="./tumbleweed.tar"
 . "$RERUN_MODULES/lib/print.sh"
 . "$RERUN_MODULES/lib/functions.sh"
-IMAGE=$(podman images | grep -F -- 'tumbleweed-rootfs' | awk '{print $3}')
+IMAGE=$(podman images | grep -F -- 'tumbleweed-rootfs ' | awk '{print $3}')
 TMPDIR=$(mktemp -d -p .)
 PRINT "+" "Extracting tarball from image..."
 podman save "$IMAGE" > "$TMPDIR/tumbleweed-rootfs.tar"
@@ -39,4 +39,3 @@ fi
 PRINT "!" "Wrote to $TARGET"
 # Done. Exit with last command exit status.
 exit $?
-
