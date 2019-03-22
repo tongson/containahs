@@ -12,6 +12,11 @@ unit_start()
     /usr/bin/systemctl --now enable "$1"
 }
 
+unit_xinstall()
+{
+    sed "s|__NAME__|$1|g" "$2" > "/etc/systemd/system/podman:$1.service"
+}
+
 unit_install()
 {
     cp "$1" /etc/systemd/system
