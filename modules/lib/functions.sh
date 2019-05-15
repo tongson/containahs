@@ -1,11 +1,9 @@
 function RERUN_FUNC_CLEANUP {
-    echo "Error encountered. Cleaning up..."
+    s=$?; echo >&2 "$0: Error on line ${LINENO}: ${BASH_COMMAND}"
     rm -rf "$TMPDIR"
-    echo "Done!"
-
+    exit $s
 }
-trap RERUN_FUNC_CLEANUP ERR
-trap RERUN_FUNC_CLEANUP INT
+trap RERUN_FUNC_CLEANUP 1 2 3 15 ERR
 
 print()
 {

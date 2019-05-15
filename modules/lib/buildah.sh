@@ -4,7 +4,7 @@ function CLEANUP {
     printf '[\e[1;33m%s\e[m] \e[1;35m%s\e[m\n' "!!" "Error encountered. Cleaning up..."
     /usr/bin/buildah rm "${NAME}" 2>/dev/null 1>/dev/null
 }
-trap CLEANUP ERR
+trap CLEANUP 1 2 3 15 ERR
 
 printf '[\e[1;33m%s\e[m] \e[1;35m%s\e[m\n' "+H" "Creating ${NAME} container..."
 __CONTAINER=$(/usr/bin/buildah from --name "${NAME}" "${FROM}")
@@ -58,5 +58,5 @@ MKDIR()
 SH()
 {
     printf '[\e[1;33m%s\e[m] \e[1;35m%s\e[m\n' "+C" "Spawning shell..."
-    /usr/bin/buildah run ${OPTS} "${__CONTAINER}" -- sh -l -c "$@"
+    /usr/bin/buildah run ${OPTS} "${__CONTAINER}" -- sh -c "$@"
 }
