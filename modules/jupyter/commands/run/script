@@ -15,4 +15,4 @@ rerun_options_parse "$@"
 
 # Command implementation
 # ----------------------
-podman run -v /srv/jupyter:/home/jupyter/volume --rm --net host --security-opt apparmor=unconfined --user jupyter --workdir /home/jupyter/volume jupyter --ip=0.0.0.0
+podman run --name jupyter -v /srv/jupyter:/home/jupyter/volume --rm --net host --security-opt apparmor=unconfined --user jupyter --workdir /home/jupyter/volume jupyter --ip=0.0.0.0
