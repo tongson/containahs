@@ -34,7 +34,7 @@ PRINT "+H" "Removing old image..."
 remove_image
 RUN zypper dup -y
 RUN zypper install --no-recommends -y systemd grub2 kernel-default kernel-firmware install-initrd-openSUSE glibc-locale grub2-x86_64-efi
-RUN zypper install --no-recommends -y e2fsprogs xfsprogs nftables iproute2 openssh tmux git vim podman buildah chrony apparmor-parser apparmor-profiles curl golang-github-prometheus-node_exporter tar which wget tcpdump strace opmsg rsync skopeo lvm2 xz ca-certificates
+RUN zypper install --no-recommends -y e2fsprogs xfsprogs nftables iproute2 openssh tmux git neovim podman buildah chrony apparmor-parser apparmor-profiles curl golang-github-prometheus-node_exporter tar which wget tcpdump strace opmsg rsync skopeo lvm2 xz ca-certificates netcat-openbsd
 RUN zypper clean --all
 CLEAR /tmp
 CLEAR /var/tmp
