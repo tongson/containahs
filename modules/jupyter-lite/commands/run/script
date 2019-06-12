@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#/ command: jupyter-lite:run: "run container"
+#/ usage: rerun jupyter-lite:run [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "run" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+podman run --name jupyter-lite -v /srv/jupyter:/home/jupyter/volume --rm --net host --security-opt apparmor=unconfined --user jupyter --workdir /home/jupyter/volume jupyter-lite --ip=0.0.0.0
+exit $?
+

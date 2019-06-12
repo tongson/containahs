@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+#/ command: jupyter-lite:local: "create local container"
+#/ usage: rerun jupyter-lite:local [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "local" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail -o errtrace
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+export NAME="jupyter-lite-build"
+export FROM="docker://docker.io/library/alpine:edge"
+export OPTS=""
+THIS="$RERUN_MODULE_DIR/commands/create"
+. "$RERUN_MODULES/lib/functions.sh"
+. "$RERUN_MODULES/lib/buildah.sh"
+BRUN="/usr/bin/buildah run ${__CONTAINER} --"
+RUN /sbin/apk upgrade --no-cache --available --no-progress
+RUN /sbin/apk add --no-cache --no-progress python3 zeromq git
+# DELETE according to PEP 594
+# cgi, uu required by pip
+# imp(py,c) required by tornado
+# pipes required by pyzmq
+${BRUN} rm -f /usr/lib/python3.7/{aifc,asynchat,asyncore,audioop,binhex,cgitb,chunk,crypt,formatter,fpectl}.py
+${BRUN} rm -f /usr/lib/python3.7/{imghdr,macpath,msilib,nntplib,nis,ossaudiodev,parser,smtpd}.py
+${BRUN} rm -f /usr/lib/python3.7/{sndhdr,spwd,sunau,xdrlib}.py
+${BRUN} rm /usr/lib/python3.7/lib-dynload/{audioop,ossaudiodev,spwd,parser}.cpython-37m-x86_64-linux-gnu.so
+RUN rm /usr/lib/python3.7/__pycache__/crypt.cpython-37.opt-1.pyc
+RUN rm /usr/lib/python3.7/__pycache__/crypt.cpython-37.opt-2.pyc
+RUN rm /usr/lib/python3.7/__pycache__/crypt.cpython-37.pyc
+RUN /sbin/apk add --no-cache --no-progress --virtual build-dependencies build-base gcc python3-dev linux-headers zeromq-dev 
+RUN adduser -D jupyter
+RUN python3 -m pip install --progress-bar off --upgrade pip
+RUN su -l -c 'python3 -m pip install --progress-bar off --no-warn-script-location --user jupyter jupyterlab' jupyter
+RUN su -l -c 'python3 -m pip install --progress-bar off --no-warn-script-location --user jupyter-spaces nbstripout' jupyter
+RUN /sbin/apk del build-dependencies
+RUN rm -rf /var/cache/apk
+CLEAR /tmp
+ENTRYPOINT '["/home/jupyter/.local/bin/jupyter-lab", "--no-browser"]'
+COMMIT jupyter-lite
+print "jupyter-lite:create OK"
+exit $?
