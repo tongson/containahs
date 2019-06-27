@@ -23,7 +23,7 @@ THIS="$RERUN_MODULE_DIR/commands/create"
 . "$RERUN_MODULES/lib/buildah.sh"
 BRUN="/usr/bin/buildah run ${__CONTAINER} --"
 RUN /sbin/apk upgrade --no-cache --available --no-progress
-RUN /sbin/apk add --no-cache --no-progress python3 zeromq git openssh-client bash sshpass
+RUN /sbin/apk add --no-cache --no-progress python3 zeromq git openssh-client bash sshpass busybox-extras
 # DELETE according to PEP 594
 # cgi, uu required by pip
 # imp(py,c) required by tornado and ansible
