@@ -29,7 +29,7 @@ RUN /sbin/apk add --no-cache --no-progress python3 zeromq git openssh-client bas
 # imp(py,c) required by tornado and ansible
 # pipes required by pyzmq
 # crypt required by ansible
-${BRUN} rm -f /usr/lib/python3.7/{aifc,asynchat,asyncore,audioop,binhex,cgitb,chunk,crypt,formatter,fpectl}.py
+${BRUN} rm -f /usr/lib/python3.7/{aifc,asynchat,asyncore,audioop,binhex,cgitb,chunk,formatter,fpectl}.py
 ${BRUN} rm -f /usr/lib/python3.7/{imghdr,macpath,msilib,nntplib,nis,ossaudiodev,parser,smtpd}.py
 ${BRUN} rm -f /usr/lib/python3.7/{sndhdr,spwd,sunau,xdrlib}.py
 ${BRUN} rm /usr/lib/python3.7/lib-dynload/{audioop,ossaudiodev,spwd,parser}.cpython-37m-x86_64-linux-gnu.so
