@@ -37,7 +37,7 @@ RUN /sbin/apk add --no-cache --no-progress --virtual build-dependencies build-ba
 RUN adduser -D jupyter
 RUN python3 -m pip install --progress-bar off --upgrade pip
 RUN su -l -c 'python3 -m pip install --progress-bar off --no-warn-script-location --user jupyter jupyterlab' jupyter
-RUN su -l -c 'python3 -m pip install --progress-bar off --no-warn-script-location --user jupyter-spaces nbstripout suitable textwrap3' jupyter
+RUN su -l -c 'python3 -m pip install --progress-bar off --no-warn-script-location --user jupyter-spaces nbstripout suitable' jupyter
 RUN /sbin/apk del build-dependencies
 RUN rm -rf /var/cache/apk
 CLEAR /tmp
