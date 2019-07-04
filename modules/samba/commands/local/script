@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+#/ command: samba:local: "create"
+#/ usage: rerun samba:local [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "local" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail -o errtrace
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+PASSWORD=${_CMD_LINE:-bash}
+test -z "$PASSWORD" && { echo >&2 "missing password argument."; exit 1; }
+export NAME="samba-build"
+export FROM="docker://docker.io/library/alpine:edge"
+export OPTS=""
+. "$RERUN_MODULES/lib/buildah.sh"
+. "$RERUN_MODULES/lib/functions.sh"
+RUN /sbin/apk upgrade --no-cache --available --no-progress
+RUN /sbin/apk add --no-cache --no-progress samba samba-common-tools
+RUN adduser -H -D -u 1000 -s /sbin/nologin smb
+SH "echo $PASSWORD | tee - | pdbedit -t -a smb"
+CLEAR /tmp
+CONFIG --entrypoint '["/usr/sbin/smbd", "-F", "-S", "-d3", "-P0", "--no-process-group"]'
+CONFIG --cmd ''
+CONFIG --stop-signal TERM
+print "+H" "Committing to local containers storage..."
+buildah commit --rm --squash "${NAME}" "containers-storage:samba"
+exit $?
