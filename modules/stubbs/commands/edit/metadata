@@ -1,4 +1,0 @@
-# command metadata
-NAME=edit
-DESCRIPTION="edit a command script"
-OPTIONS="command module"

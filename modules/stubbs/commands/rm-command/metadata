@@ -1,4 +1,0 @@
-# command metadata
-NAME=rm-command
-DESCRIPTION="remove a command"
-OPTIONS="command module"

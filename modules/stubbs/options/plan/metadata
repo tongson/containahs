@@ -1,8 +1,0 @@
-NAME=plan
-DESCRIPTION="the test plan"
-ARGUMENTS=true
-REQUIRED=false
-DEFAULT=
-SHORT=p
-LONG=plan
-RANGE=

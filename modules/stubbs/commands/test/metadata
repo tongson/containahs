@@ -1,4 +1,0 @@
-# command metadata
-NAME=test
-DESCRIPTION="run module test scripts"
-OPTIONS="answers module plan"

@@ -1,1 +1,0 @@
-The archive output format.
