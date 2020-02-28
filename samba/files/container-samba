@@ -1,4 +1,0 @@
-NAME=samba
-IMAGE=abcdefabcdef
-BIND=/share:/share
-CONFIG=/etc/samba:/etc/samba

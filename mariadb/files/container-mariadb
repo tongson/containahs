@@ -1,3 +1,0 @@
-NAME=mariadb
-IMAGE=abcdefabcdef
-BIND=/srv/mariadb/data:/data

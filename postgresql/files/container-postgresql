@@ -1,3 +1,0 @@
-NAME=postgresql
-IMAGE=abcdefabcdef
-BIND=/srv/postgresql/data:/data

@@ -1,5 +1,0 @@
-APT_GET="/usr/bin/env DEBIAN_FRONTEND=noninteractive apt-get -qq"
-DIR /usr/share/man/man1
-RUN /usr/bin/touch /usr/share/man/man1/sh.distrib.1.gz
-RUN $APT_GET update
-RUN $APT_GET dist-upgrade
