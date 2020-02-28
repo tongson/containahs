@@ -30,7 +30,7 @@ sfdump = ->
     CLEAR       dirs
     SCRIPT      "rmusers"
     SCRIPT      "rmsuid"
-    ENTRYPOINT  '["/usr/bin/sfdump"]'
+    ENTRYPOINT  '["/usr/bin/sfcapd"]'
     ARCHIVE "nfdump-sflow"
 buildah = require"buildah".from base, sfdump, assets
 buildah!
