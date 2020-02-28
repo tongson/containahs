@@ -5,7 +5,7 @@ sfdump = ->
     COPY        "01_nodoc", "/etc/dpkg/dpkg.cfg.d/01_nodoc"
     APT_GET     "update"
     APT_GET     "full-upgrade"
-    APT_GET     "install nfdump-slow"
+    APT_GET     "install nfdump-sflow"
     APT_GET     "--allow-remove-essential remove sysvinit-utils e2fsprogs e2fslibs tzdata"
     APT_GET     "autoremove"
     APT_GET     "autoclean"
