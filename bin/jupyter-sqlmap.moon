@@ -23,6 +23,6 @@ sqlmap = ->
     RUN         '/sbin/apk del build-dependencies'
     RM          '/var/cache/apk'
     ENTRYPOINT  '["/home/jupyter/.local/bin/jupyter-lab", "--no-browser"]'
-    ARCHIVE     'jupyter-sqlmap'
+    STORAGE     'jupyter-sqlmap'
 buildah = require"buildah".from base, sqlmap
 buildah!
