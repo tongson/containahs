@@ -116,10 +116,11 @@ local from = function(base, fn, cwd, name)
     end
     --++ ### ENTRYPOINT(executable)
     --++ Sets the container entrypoint.
+    --++ NOTE: Only accepts a single entrypoint item, usually the executable.
     --++  
     env.entrypoint = function(s)
         msg.debug("ENTRYPOINT %s", s)
-        popen("buildah config --entrypoint '%s' %s", s, name)
+        popen("buildah config --entrypoint '[\"%s\"]' %s", s, name)
         popen("buildah config --cmd '' %s", name)
         popen("buildah config --stop-signal TERM %s", name)
     end
