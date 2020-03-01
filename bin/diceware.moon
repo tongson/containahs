@@ -31,7 +31,7 @@ diceware = ->
     CLEAR       dirs
     SCRIPT      "rmusers"
     SCRIPT      "rmsuid"
-    ENTRYPOINT  '["/usr/bin/diceware"]'
+    ENTRYPOINT  "/usr/bin/diceware"
     STORAGE     "diceware"
 buildah = require"buildah".from base, diceware, assets
 buildah!

@@ -22,7 +22,7 @@ sqlmap = ->
     RUN         'su -l -c "python3 -m pip install --progress-bar off --no-warn-script-location --user sqlmap executor" jupyter'
     RUN         '/sbin/apk del build-dependencies'
     RM          '/var/cache/apk'
-    ENTRYPOINT  '["/home/jupyter/.local/bin/jupyter-lab", "--no-browser"]'
+    ENTRYPOINT  '/home/jupyter/.local/bin/jupyter-lab'
     STORAGE     'jupyter-sqlmap'
 buildah = require"buildah".from base, sqlmap
 buildah!
