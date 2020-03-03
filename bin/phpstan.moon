@@ -24,5 +24,5 @@ phpstan = ->
     RUN         "composer global require phpstan/phpstan:#{argu.version}"
     ENTRYPOINT  "phpstan"
     STORAGE     "phpstan"
-buildah = require"buildah".from ,base ,phpstan, assets
+buildah = require"buildah".from base ,phpstan, assets
 buildah!
