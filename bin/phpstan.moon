@@ -22,7 +22,7 @@ phpstan = ->
     RUN         "php /composer-setup.php --install-dir=/usr/bin --filename=composer"
     RM          "/composer-setup.php"
     RUN         "composer global require phpstan/phpstan:#{argu.version}"
-    ENTRYPOINT  "phpstan"
+    ENTRYPOINT  "/root/.composer/vendor/bin/phpstan"
     STORAGE     "phpstan"
 buildah = require"buildah".from base ,phpstan, assets
 buildah!
