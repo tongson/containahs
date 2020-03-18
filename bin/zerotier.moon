@@ -52,7 +52,7 @@ script = ->
     CLEAR       dirs
     SCRIPT      "rmusers"
     SCRIPT      "rmsuid"
-    ENTRYPOINT  '["/usr/sbin/zerotier-one"]'
-    STORAGE     "zerotier"
+    ENTRYPOINT  "/usr/sbin/zerotier-one"
+    STORAGE     "zerotier", "#{argu.version}"
 zerotier = require"buildah".from "docker://docker.io/library/debian:buster-slim", script, "zerotier.d"
 zerotier!
