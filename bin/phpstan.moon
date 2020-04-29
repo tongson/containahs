@@ -1,15 +1,4 @@
 #!/usr/bin/env moon
-cli = require "cliargs"
-cli\option "-v, --version=VERSION", "PHPSTAN version"
-cli\set_name "phpstan"
-argu = cli\parse(args)
-if not argu
-    cli\print_help!
-    os.exit(0)
-if not argu.version
-    cli\print_help!
-    os.exit(1)
-
 base = "docker://docker.io/library/php:7.4-cli-alpine"
 assets = "phpstan.d"
 phpstan = ->
@@ -21,7 +10,7 @@ phpstan = ->
     COPY        "composer-setup.php"
     RUN         "php /composer-setup.php --install-dir=/usr/bin --filename=composer"
     RM          "/composer-setup.php"
-    RUN         "composer global require phpstan/phpstan:#{argu.version}"
+    RUN         "composer global require phpstan/phpstan:#{arg[1]}"
     ENTRYPOINT  "/root/.composer/vendor/bin/phpstan"
     STORAGE     "phpstan"
 buildah = require"buildah".from base ,phpstan, assets
