@@ -13,14 +13,15 @@ local HOME = os.getenv "HOME"
 --++ ## buildah.from(base, [assets])
 --++ Returns a function that executes the *main* `buildah` routine containing the `buildah` DSL.
 --++
---++ *base* is a required string indicating the container image to base from. (e.g. `docker://docker.io/library/debian:stable-slim`)
+--++ *base* is a required string indicating the container image to base from.
+--++     example: `docker://docker.io/library/debian:stable-slim`
 --++ *assets* is an optional string that corresponds to the assets directory.
 --++
 --++ # DSL
 local from = function(base, assets, name)
     assets = assets or "."
     local dir = "./buildah"
-    local util_buildah = "/____util-buildah"
+    local util_buildah = "/.buildah"
 
     local popen = exec.ctx()
     popen.env = { USER = USER, HOME = HOME }
@@ -34,18 +35,23 @@ local from = function(base, assets, name)
         msg.ok(F("Reusing %s.", name))
     end
 
-    popen("buildah add %s '%s/util-buildah.tar.xz' '%s'", name, dir, util_buildah)
+    if not (base == "scratch") then
+        popen("buildah add %s '%s/util-buildah.tar.xz' '%s'", name, dir, util_buildah)
+    end
     msg.ok"Copied util-buildah executables to container root."
 
-    local mount do
-        local _, res = popen("buildah mount --notruncate %s", name)
-        mount = res.output[1]
-    end
-
     local rm_util_buildah = function()
-	popen("test -d %s/%s", mount, util_buildah)
-	popen("rm -rf %s/%s", mount, util_buildah)
-	popen("buildah unmount %s", name)
+       if not (base == "scratch") then
+           popen("buildah run %s -- %s/rm %s/wipe_docs", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/wipe_userland", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/wipe_debian", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/wipe_perl", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/wipe_dirs", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/wipe_sh", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/mkdir", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/chmod", name, util_buildah, util_buildah)
+           popen("buildah run %s -- %s/rm %s/rm", name, util_buildah, util_buildah)
+        end
     end
 
     local env = {}
@@ -212,9 +218,9 @@ local from = function(base, assets, name)
         popen("buildah commit --format docker --squash --rm %s dir:%s", name, tmpname)
         local _, r = popen("/usr/bin/aws ecr get-login")
         local ecrpass = string.match(r.output[1], "^docker%slogin%s%-u%sAWS%s%-p%s([A-Za-z0-9=]+)%s.*$")
-        popen("/usr/bin/skopeo copy --dcreds AWS:%s dir:%s %s/%s:%s", ecrpass, tmpname, repo, cname, tag)
+        popen("/usr/bin/skopeo copy --dcreds AWS:%s dir:%s docker://%s/%s:%s", ecrpass, tmpname, repo, cname, tag)
         popen("/usr/bin/skopeo copy dir:%s containers-storage:%s:%s", tmpname, cname, tag)
-        os.execute(F("rm -r %s/%s", cwd, tmpname))
+        os.execute(F("rm -r %s", tmpname))
         msg.ok("Pushed %s:%s", cname, tag)
     end
     --++ ### LOCAL_PUSH(repository, credentials, name, tag)
@@ -223,13 +229,17 @@ local from = function(base, assets, name)
     --++ Alias: PUSH
     --++ > NOTE: This finalizes the `buildah` run.
     --++
-    env.LOCAL_PUSH = function(repo, creds, cname, tag)
+    env.LOCAL_PUSH = function(cname, tag, ...)
         msg.debug("PUSH %s:%s", cname, tag)
+        local repo = os.getenv("BUILDAH_REPO")
+        local creds = os.getenv("BUILDAH_CRED")
         rm_util_buildah()
         local tmpname = F("%s.%s", cname, util.random_string(16))
         popen("buildah commit --format docker --squash --rm %s dir:%s", name, tmpname)
         popen("/usr/bin/skopeo copy --dcreds %s dir:%s docker://%s/%s:%s", creds, tmpname, repo, cname, tag)
-        popen("/usr/bin/skopeo copy dir:%s containers-storage:%s:%s", tmpname, cname, tag)
+        for _, newtag in ipairs{...} do
+            popen("/usr/bin/skopeo copy --src-creds %s --dest-creds %s docker://%s/%s:%s docker://%s/%s:%s", creds, creds, repo, cname, tag, repo, cname, newtag)
+        end
         popen("rm -r %s", tmpname)
         msg.ok("Pushed %s:%s", cname, tag)
     end
@@ -269,7 +279,7 @@ local from = function(base, assets, name)
         popen("XZ_OPT=-T0 /usr/bin/tar -C %s -cJf IMAGE.tar.xz %s", tmpname, cname)
         popen("/usr/bin/scp IMAGE.tar.xz %s/%s/%s", ssh, cname, dtag)
         popen("rm IMAGE.tar.xz")
-        os.execute(F("rm -r %s/%s", cwd, tmpname))
+        os.execute(F("rm -r %s", tmpname))
     end
     env.WIPE = function(a)
         if a == "directories" then
@@ -291,6 +301,10 @@ local from = function(base, assets, name)
         if a == "docs" then
             msg.debug("WIPE (documentation)")
             popen("buildah run %s -- %s/wipe_docs", name, util_buildah)
+        end
+        if a == "sh" then
+            msg.debug("WIPE (removing sh)")
+            popen("buildah run %s -- %s/wipe_sh", name, util_buildah)
         end
     end
     setfenv(2, env)
