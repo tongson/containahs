@@ -3,5 +3,5 @@ buildah = require"buildah".from "docker://gcr.io/distroless/static"
 COPY        "pwndrop"
 COPY        "admin"
 WIPE        "directories"
-ENTRYPOINT  "/pwndrop
+ENTRYPOINT  "/pwndrop"
 PUSH        "pwndrop", "1.0.1"
