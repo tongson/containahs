@@ -1,2 +1,2 @@
 cd /zeek-af_packet-plugin
-./configure --zeek-dist=/zeek-3.2.2 && make && make install
+env CFLAGS='-O3 -DNDEBUG -march=nocona -mtune=haswell -msse4.2 -fomit-frame-pointer -pipe' CXXFLAGS='-O3 -DNDEBUG -march=nocona -mtune=haswell -msse4.2 -fomit-frame-pointer -pipe' ./configure --with-latest-kernel --zeek-dist=/zeek-3.2.2 && make && make install
