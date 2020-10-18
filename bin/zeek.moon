@@ -1,5 +1,5 @@
 #!/usr/bin/env moon
-require"buildah".from "9fffd87e52de", "zeek"
+require"buildah".from "24062c94d7bc", "zeek"
 APT_PURGE "sysvinit-utils bash tzdata e2fsprogs e2fslibs util-linux mount login hostname fdisk bsdutils findutils"
 APT_GET   "--purge autoremove"
 APT_GET   "autoclean"
