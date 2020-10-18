@@ -1,9 +1,5 @@
 #!/usr/bin/env moon
 require"buildah".from "9fffd87e52de", "zeek"
-COPY      "file-extraction", "/opt/zeek/share/zeek/site/file-extraction"
-COPY      "local.zeek", "/opt/zeek/share/zeek/site/local.zeek"
-COPY      "conn-add-geodata.zeek", "/opt/zeek/share/zeek/site/geodata/conn-add-geodata.zeek"
-COPY      "log-passwords.zeek", "/opt/zeek/share/zeek/site/passwords/log-passwords.zeek"
 APT_PURGE "sysvinit-utils bash tzdata e2fsprogs e2fslibs util-linux mount login hostname fdisk bsdutils findutils"
 APT_GET   "--purge autoremove"
 APT_GET   "autoclean"
